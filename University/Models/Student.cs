@@ -82,7 +82,7 @@ namespace University.Models
       {
         conn.Dispose();
       }
-      return allItems;
+      return allStudents;
     }
   }
 }
