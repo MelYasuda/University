@@ -40,6 +40,14 @@ namespace University.Controllers
         return View(model);
 
       }
-    }
 
+      [HttpPost("/students/{studentId}/courses/new")]
+      public ActionResult AddCourse(int studentId)
+      {
+        Student student = Student.Find(studentId);
+        Course course = Course.Find(Int32.Parse(Request.Form["course-id"]));
+        student.AddCourse(course);
+        return RedirectToAction("Index");
+      }
+    }
 }

@@ -1,5 +1,9 @@
-@using University.Models;
+@{
+  Layout = "_Layout";
+}
 
+@using University.Models;
+<div class = "container">
 <h1>Selected Student: </h1>
 <h2>Student: @Model["selectedStudent"].GetName()</h2>
 <h2>Enrollment Date: @Model["selectedStudent"].GetDate()</h2>
@@ -23,6 +27,7 @@
       <option value='@course.GetId()'>@course.GetDescription()</option>
     }
   </select>
-  <button class = "btn btn-danger "type='submit'>Add Course</button>
+  <button type='submit' class = 'btn btn-danger' >Add Course</button>
 </form>
-<a href="/" class = "btn btn-danger "type='submit'>Add Course</a>
+<a href = "/" class="btn btn-danger">Home</a>
+</div>

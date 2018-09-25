@@ -86,5 +86,37 @@ namespace University.Models
       return allCourses;
     }
 
+    public static Course Find(int id)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM courses WHERE id = (@searchId);";
+
+      MySqlParameter searchId = new MySqlParameter();
+      searchId.ParameterName = "@searchId";
+      searchId.Value = id;
+      cmd.Parameters.Add(searchId);
+
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      int courseId = 0;
+      string courseDescription = "";
+      string courseNumber = "";
+
+      rdr.Read();
+      courseId = rdr.GetInt32(0);
+      courseDescription = rdr.GetString(1);
+      courseNumber = rdr.GetString(2);
+
+      Course newCourse = new Course(courseDescription, courseNumber, courseId);
+      conn.Close();
+      if (conn != null)
+    {
+      conn.Dispose();
+    }
+
+    return newCourse;
+    }
+
   }
 }
