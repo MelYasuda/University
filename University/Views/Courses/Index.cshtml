@@ -1,0 +1,25 @@
+@{
+  Layout = "_Layout";
+}
+
+<div class="container">
+  <h1>List of courses: </h1>
+
+  @if(Model.Count == 0)
+  {
+    <p>No courses has been added yet</p>
+  }
+  else
+  {
+  <ul>
+  @foreach(var course in Model)
+  {
+    <li><a href='/courses/@course.GetId()'>@course.GetDescription()</a></li>
+  }
+  </ul>
+  }
+
+<a href = "/" class="btn btn-danger">Home</a>
+<a href = "/courses/new" class="btn btn-warning">Add a new course</a>
+
+</div>

@@ -23,12 +23,12 @@ namespace University.Models
       return _id;
     }
 
-    public int GetDescription()
+    public string GetDescription()
     {
       return _description;
     }
 
-    public int GetCourseNumber()
+    public string GetCourseNumber()
     {
       return _course_number;
     }
