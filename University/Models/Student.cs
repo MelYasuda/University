@@ -39,7 +39,7 @@ namespace University.Models
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO items (name, date) VALUES (@name, @date);";
+      cmd.CommandText = @"INSERT INTO students (name, date) VALUES (@name, @date);";
 
       MySqlParameter name = new MySqlParameter();
       name.ParameterName = "@name";
