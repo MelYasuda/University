@@ -9,9 +9,9 @@ namespace University.Models
   {
     private int _id;
     private string _name;
-    private Date _date;
+    private DateTime _date;
 
-    public Student(int id, string name, Date date)
+    public Student( string name, DateTime date, int id = 0)
     {
       _id = id;
       _name = name;
@@ -28,7 +28,7 @@ namespace University.Models
       return _name;
     }
 
-    public Date GetDate()
+    public DateTime GetDate()
     {
       return _date;
     }
@@ -58,6 +58,31 @@ namespace University.Models
       {
         conn.Dispose();
       }
+    }
+
+    public static List<Student> GetAll()
+    {
+      List<Student> allStudents = new List<Student>{};
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT * FROM students;";
+      var rdr = cmd.ExecuteReader() as MySqlDataReader;
+      while(rdr.Read())
+      {
+        int studentId = rdr.GetInt32(0);
+        string studentName = rdr.GetString(1);
+        DateTime studentDate = rdr.GetDateTime(2);
+
+        Student newStudent = new Student(studentName, studentDate, studentId);
+        allStudents.Add(newStudent);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return allItems;
     }
   }
 }
