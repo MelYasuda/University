@@ -27,6 +27,18 @@ namespace University.Controllers
         return RedirectToAction("Index");
       }
 
+      [HttpGet("/courses/{id}")]
+      public ActionResult Details(int id)
+      {
+        Dictionary<string, object> model = new Dictionary<string, object>();
+        Course selectedCourse = Course.Find(id);
+        List<Student> listStudents = selectedCourse.GetStudents();
+        model.Add("selectedCourse", selectedCourse);
+        model.Add("listStudents", listStudents);
+        return View(model);
+
+      }
+
     }
 
 }

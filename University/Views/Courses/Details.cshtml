@@ -1,0 +1,33 @@
+@{
+  Layout = "_Layout";
+}
+
+@using University.Models;
+<div class = "container">
+<h1>Selected Course: </h1>
+<h2>Course: @Model["selectedCourse"].GetDescription()</h2>
+<h2>Course Number: @Model["selectedCourse"].GetCourseNumber()</h2>
+<hr />
+@if (@Model["listStudents"].Count != 0)
+{
+  <h4>This student enrolled in these courses:</h4>
+  <ul>
+    @foreach (Student student in @Model["listStudents"])
+    {
+      <li>@student.GetName()</li>
+    }
+  </ul>
+}
+<!-- <h4>Add a course to this student:</h4>
+<form action='/students/@Model["selectedStudent"].GetId()/courses/new' method='post'>
+  <label for='course-id'>Select a course</label>
+  <select id='course-id' name='course-id' type='text'>
+    @foreach (var course in @Model["allCourses"])
+    {
+      <option value='@course.GetId()'>@course.GetDescription()</option>
+    }
+  </select>
+  <button type='submit' class = 'btn btn-danger' >Add Course</button>
+</form> -->
+<a href = "/" class="btn btn-danger">Home</a>
+</div>

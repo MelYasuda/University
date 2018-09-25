@@ -118,5 +118,63 @@ namespace University.Models
     return newCourse;
     }
 
+    public void AddStudent(Student newStudent)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO students_courses (student_id, course_id) VALUES (@StudentId, @CourseId);";
+
+      MySqlParameter course_id = new MySqlParameter();
+      course_id.ParameterName = "@CourseId";
+      course_id.Value = _id;
+      cmd.Parameters.Add(course_id);
+
+      MySqlParameter student_id = new MySqlParameter();
+      student_id.ParameterName = "@StudentId";
+      student_id.Value = newStudent.GetId();
+      cmd.Parameters.Add(student_id);
+
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+    public List<Student> GetStudents()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT students.* FROM courses
+      JOIN students_courses ON (courses.id = students_courses.course_id)
+      JOIN students ON (students_courses.student_id = students.id)
+      WHERE courses.id = @CourseId;";
+
+      MySqlParameter courseIdParameter = new MySqlParameter();
+      courseIdParameter.ParameterName = "@CourseId";
+      courseIdParameter.Value = _id;
+      cmd.Parameters.Add(courseIdParameter);
+
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      List<Student> students = new List<Student>{};
+
+      while(rdr.Read())
+      {
+        int studentId = rdr.GetInt32(0);
+        string studentName = rdr.GetString(1);
+        DateTime enrollmentDate = rdr.GetDateTime(2);
+        Student newStudent = new Student(studentName, enrollmentDate, studentId);
+        students.Add(newStudent);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return students;
+    }
   }
 }
