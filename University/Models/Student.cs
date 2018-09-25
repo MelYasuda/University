@@ -84,5 +84,95 @@ namespace University.Models
       }
       return allStudents;
     }
+
+      public static Student Find(int id)
+      {
+        MySqlConnection conn = DB.Connection();
+        conn.Open();
+        var cmd = conn.CreateCommand() as MySqlCommand;
+        cmd.CommandText = @"SELECT * FROM students WHERE id = (@searchId);";
+
+        MySqlParameter searchId = new MySqlParameter();
+        searchId.ParameterName = "@searchId";
+        searchId.Value = id;
+        cmd.Parameters.Add(searchId);
+
+        var rdr = cmd.ExecuteReader() as MySqlDataReader;
+        int studentId = 0;
+        string studentName = "";
+
+        rdr.Read();
+        studentId = rdr.GetInt32(0);
+        studentName = rdr.GetString(1);
+        DateTime enrollmentDate = rdr.GetDateTime(2);
+
+        Student newStudent = new Student(studentName, enrollmentDate, studentId);
+        conn.Close();
+        if (conn != null)
+      {
+        conn.Dispose();
+      }
+
+      return newStudent;
+      }
+
+    public void AddCourse(Course newCourse)
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      var cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"INSERT INTO students_courses (student_id, course_id) VALUES (@StudentId, @CourseId);";
+
+      MySqlParameter course_id = new MySqlParameter();
+      course_id.ParameterName = "@CourseId";
+      course_id.Value = newCourse.GetId();
+      cmd.Parameters.Add(course_id);
+
+      MySqlParameter student_id = new MySqlParameter();
+      student_id.ParameterName = "@StudentId";
+      student_id.Value = _id;
+      cmd.Parameters.Add(student_id);
+
+      cmd.ExecuteNonQuery();
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+    }
+
+    public List<Course> GetCourses()
+    {
+      MySqlConnection conn = DB.Connection();
+      conn.Open();
+      MySqlCommand cmd = conn.CreateCommand() as MySqlCommand;
+      cmd.CommandText = @"SELECT courses.* FROM students
+      JOIN students_courses ON (students.id = students_courses.student_id)
+      JOIN courses ON (students_courses.course_id = courses.id)
+      WHERE students.id = @StudentId;";
+
+      MySqlParameter studentIdParameter = new MySqlParameter();
+      studentIdParameter.ParameterName = "@StudentId";
+      studentIdParameter.Value = _id;
+      cmd.Parameters.Add(studentIdParameter);
+
+      MySqlDataReader rdr = cmd.ExecuteReader() as MySqlDataReader;
+      List<Course> courses = new List<Course>{};
+
+      while(rdr.Read())
+      {
+        int courseId = rdr.GetInt32(0);
+        string courseDescription = rdr.GetString(1);
+        string courseNumber = rdr.GetString(2);
+        Course newCourse = new Course(courseDescription, courseNumber, courseId);
+        courses.Add(newCourse);
+      }
+      conn.Close();
+      if (conn != null)
+      {
+        conn.Dispose();
+      }
+      return courses;
+    }
   }
 }

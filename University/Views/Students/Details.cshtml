@@ -1,0 +1,28 @@
+@using University.Models;
+
+<h1>Selected Student: </h1>
+<h2>Student: @Model["selectedStudent"].GetName()</h2>
+<h2>Enrollment Date: @Model["selectedStudent"].GetDate()</h2>
+<hr />
+@if (@Model["studentCourses"].Count != 0)
+{
+  <h4>This student enrolled in these courses:</h4>
+  <ul>
+    @foreach (Course course in @Model["studentCourses"])
+    {
+      <li>@course.GetDescription()</li>
+    }
+  </ul>
+}
+<h4>Add a course to this student:</h4>
+<form action='/students/@Model["selectedStudent"].GetId()/courses/new' method='post'>
+  <label for='course-id'>Select a course</label>
+  <select id='course-id' name='course-id' type='text'>
+    @foreach (var course in @Model["allCourses"])
+    {
+      <option value='@course.GetId()'>@course.GetDescription()</option>
+    }
+  </select>
+  <button class = "btn btn-danger "type='submit'>Add Course</button>
+</form>
+<a href="/" class = "btn btn-danger "type='submit'>Add Course</a>
