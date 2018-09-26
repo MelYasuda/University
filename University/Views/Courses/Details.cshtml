@@ -10,7 +10,7 @@
 <hr />
 @if (@Model["listStudents"].Count != 0)
 {
-  <h4>This student enrolled in these courses:</h4>
+  <h4>These students enrolled in these course:</h4>
   <ul>
     @foreach (Student student in @Model["listStudents"])
     {
@@ -18,16 +18,5 @@
     }
   </ul>
 }
-<!-- <h4>Add a course to this student:</h4>
-<form action='/students/@Model["selectedStudent"].GetId()/courses/new' method='post'>
-  <label for='course-id'>Select a course</label>
-  <select id='course-id' name='course-id' type='text'>
-    @foreach (var course in @Model["allCourses"])
-    {
-      <option value='@course.GetId()'>@course.GetDescription()</option>
-    }
-  </select>
-  <button type='submit' class = 'btn btn-danger' >Add Course</button>
-</form> -->
 <a href = "/" class="btn btn-danger">Home</a>
 </div>
